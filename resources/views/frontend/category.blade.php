@@ -1,0 +1,122 @@
+@extends('frontend.master')
+@section('title')
+<title>{{ $cat->title }}</title>
+@stop
+@section('content')
+		<!-- SECTION -->
+		<div class="section">
+			<!-- CONTAINER -->
+			<div class="container">
+
+				<!-- ROW -->
+				<div class="row">
+					<!-- Main Column -->
+					<div class="col-md-8">
+                            <!-- section title -->
+						<div class="section-title">
+							<h2 class="title">{{ $cat->title }}</h2>
+						</div>
+						<!-- /section title -->
+                        @foreach($posts as $post)
+							<!-- ARTICLE -->
+							<article class="article row-article">
+								<div class="article-img">
+									<a href="{{ url('article') }}/{{ $post->slug }}">
+										<img src="{{ asset('uploads/posts')}}/{{ $post->image }}" alt="{{$post->title }}">
+									</a>
+								</div>
+								<div class="article-body">
+
+									<h3 class="article-title"><a href="{{ url('article') }}/{{ $post->slug }}">{{ $post->title }}</a></h3>
+									<ul class="article-meta">
+										<li><i class="fa fa-clock-o"></i> {{ Carbon\Carbon::parse($post->created_at)->diffForHumans() }}</li>
+									</ul>
+									<p>{{ mb_substr($post->description_short, 0, 200, 'UTF-8') }}...<a href="{{ url('article') }}/{{ $post->slug }}">читать дальше &raquo;</a></p>
+								</div>
+
+							</article>
+							<!-- /ARTICLE -->
+                        @endforeach
+						<div class="article-pagination">
+							{{ $posts->links('partials.view-paginate') }}
+						</div>
+					</div>
+					<!-- /Main Column -->
+
+					<!-- Aside Column -->
+					<div class="col-md-4">
+						@if(count($galleries) > 0)
+						<!-- galery widget -->
+						<div class="widget galery-widget">
+							<div class="widget-title">
+								<a href="{{ url('/multi-gallery') }}" ><h2 class="title">Галегея</h2></a>
+							</div>
+							<ul>
+								@foreach($galleries as $key => $gallery)
+									@if($key < 8)
+										<li><a href="{{ asset('uploads/galleries')}}/{{ $gallery->image }}">
+											<img src="{{ asset('uploads/galleries')}}/{{ $gallery->image }}" alt="" style="width:100px !important; height: 70px !important;">
+											</a>
+										</li>
+									@endif
+								@endforeach
+							</ul>
+						</div>
+						<!-- /galery widget -->
+						@endif
+						@if(isset($youtube))
+						<!-- /galery widget -->
+						<div class="widget galery-widget">
+							<div class="widget-title">
+								<a href="{{ url($youtube->youtube) }}"><h2 class="title">{{ $youtube->titleyou }}</h2></a>
+							</div>
+							<iframe src="https://www.youtube.com/embed/{{ $codeyt }}"
+   							width="360" height="240" frameborder="0" allowfullscreen></iframe>
+						</div>
+						@endif
+						@if(isset($video))
+						<div class="widget galery-widget">
+							<div class="widget-title-video">
+								<a href="{{ url('screenvideo') }}/{{ $video->slug }}">
+									<video controls width="360" height="240" >
+										<source src="{{ url('uploads/videos') }}/{{ $video->image }}" type="video/mp4">
+									</video>
+								</a>
+							</div>
+						</div>
+						@endif
+
+
+						<!-- article widget -->
+						<div class="widget">
+							<div class="section-title">
+								<h2 class="title">Документы</h2>
+							</div>
+
+
+							<!-- /owl carousel 3 -->
+							@foreach($documents as $key => $d)
+							@if($key > -1 && $key < 5)
+							<!-- ARTICLE -->
+							<article class="article widget-article">
+								<div class="article-body">
+									<h4 class="article-title"><a href="https://docs.google.com/gview?url={{ url('uploads/documents')}}/{{ $d->image }}">{{ $d->title }}</a></h4>
+								</div>
+							</article>
+							<!-- /ARTICLE -->
+							@endif
+							@endforeach
+
+						</div>
+						<!-- /article widget -->
+					</div>
+					<!-- /Aside Column -->
+				</div>
+				<!-- /ROW -->
+			</div>
+			<!-- /CONTAINER -->
+		</div>
+		<!-- /SECTION -->
+
+
+@stop
